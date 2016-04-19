@@ -31,7 +31,6 @@ class ServiceProvider extends BaseServiceProvider
         \Barryvdh\Cors\HandleCors::class,
     ];
 
-
     /**
      * @var boolean
      */
@@ -49,12 +48,22 @@ class ServiceProvider extends BaseServiceProvider
         }
     }
 
+    /**
+     * Boot this package.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->addMiddlewares($this->app->make('Illuminate\Contracts\Http\Kernel'));
     }
 
-    protected function addMiddlewares(Kernel $kernel)
+    /**
+     * Add middlewares from this package.
+     *
+     * @param \Illuminate\Contracts\Http\Kernel $kernel
+     */
+    protected function addMiddlewares($kernel)
     {
         foreach ($this->otherMiddlewares as $key => $value) {
             $kernel->pushMiddleware($value);
