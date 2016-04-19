@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Mmstreet\\common\\": "src"
+            "Mmstreet\\Common\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mmstreet\\common\\": "tests"
+            "Mmstreet\\Common\\": "tests"
         }
     },
     "scripts": {

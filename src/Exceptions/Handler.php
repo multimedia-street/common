@@ -1,6 +1,6 @@
 <?php
 
-namespace Mmstreet\Exceptions;
+namespace Mmstreet\Common\Exceptions;
 
 use Exception;
 use Whoops\Run;
