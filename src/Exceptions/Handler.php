@@ -2,17 +2,27 @@
 
 namespace Mmstreet\Common\Exceptions;
 
+use Barryvdh\Cors\Stack\CorsService;
 use Exception;
-use Whoops\Run;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Handler\JsonResponseHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Whoops\Handler\JsonResponseHandler;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
 
 class Handler extends ExceptionHandler
 {
+    /**
+     * List of URIs for CORS.
+     *
+     * @var araray
+     */
+    protected $corsUris = [
+        'api/*'
+    ];
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -50,8 +60,10 @@ class Handler extends ExceptionHandler
         }
 
         $response = parent::render($request, $e);
-        if ($request->is('api/*')) {
-            app('Barryvdh\Cors\Stack\CorsService')->addActualRequestHeaders($response, $request);
+        foreach ($this->corsUris as $value) {
+            if ($request->is($value)) {
+                app(CorsService::class)->addActualRequestHeaders($response, $request);
+            }
         }
 
         return $this->renderInAjax($e, $request, $response);
