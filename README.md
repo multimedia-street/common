@@ -15,6 +15,7 @@ Some boilerplate for most of the Multimedia Street projects.
  - [Add to Service Provider](#add-to-service-provider)
  - [Disabling CSRF protection for your API](#disabling-csrf-protection-for-your-api)
 - [Post Install](#post-install)
+ - [Publish Packages Configurations](#publish-packages-configurations)
  - [Extend Exception Handler](#extend-exception-handler)
  - [Response Trait](#response-trait)
 - [Change Log](#change-log)
@@ -75,6 +76,13 @@ protected $except = [
 
 
 ## Post Install
+
+#### Publish Packages Configurations
+After the installation is completed, publish the vendor publish by running:
+
+``` bash
+php artisan vendor:publish
+```
 
 #### Extend Exception Handler
 You can use the Exception handler specially for developing. This includes the [Whoops](https://github.com/filp/whoops). You can extend your `app/Exceptions/Handler.php` with `Mmstreet\Common\Exceptions\Handler`. Also add your uris using the `$corsUris` property to be used in [CORS](https://github.com/barryvdh/laravel-cors). See example below.
