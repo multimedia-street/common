@@ -2,6 +2,8 @@
 
 namespace Mmstreet\Common\Traits;
 
+use Illuminate\Support\Facades\Request;
+
 trait ResponseTrait
 {
     /**
@@ -124,7 +126,7 @@ trait ResponseTrait
      */
     private function __return($status, $message, $data, $statusCode = 200, $viewName = 'data', $headers = [], $callback = 'callback')
     {
-        if (\Request::ajax() || \Request::wantsJson()) {
+        if (Request::ajax() || Request::wantsJson() || Request::isJson() || Request::acceptsJson()) {
             return $this->responseInJson($status, $message, $data, $statusCode, $headers, $callback);
         }
 
