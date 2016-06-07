@@ -66,12 +66,21 @@ class Handler extends ExceptionHandler
             }
         }
 
-        return $this->renderInAjax($e, $request, $response);
+        return $this->renderPretty($e, $request, $response);
     }
 
-    public function renderInAjax(Exception $e, $request, $response)
+    /**
+     * Return an ajax or prettify with whoops.
+     *
+     * @param  Exception $e
+     * @param  \Illuminate\Http\Request    $request
+     * @param  \Illuminate\Http\Response    $response
+     *
+     * @return mixed
+     */
+    public function renderPretty(Exception $e, $request, $response)
     {
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($this->areYouAnAjax($request)) {
             $res               = [];
             $res['status']     = 'error';
             $res['message']    = empty($e->getMessage()) ? $response::$statusTexts[$response->getStatusCode()] : $e->getMessage();
@@ -83,9 +92,24 @@ class Handler extends ExceptionHandler
 
             return $response->setContent($res);
         } else {
+            if (view()->exists('errors.' . $response->getStatusCode())) {
+                return response()->view('errors.' . $response->getStatusCode(), compact('response'));
+            }
             $whoops = (new Run())->pushHandler(new PrettyPageHandler);
 
             return $whoops->handleException($e);
         }
+    }
+
+    /**
+     * Asking if the request is a type of AJAX request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return bool
+     */
+    protected function areYouAnAjax(Request $request)
+    {
+        return ($request->ajax() || $request->wantsJson() || $request->acceptsJson() || $request->isJson());
     }
 }
